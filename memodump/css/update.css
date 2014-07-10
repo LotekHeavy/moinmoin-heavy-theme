@@ -20,7 +20,9 @@ html > body {
 #contentbox #location .lastupdate {
     display:    none;
 }
-
+#contentbox #location #pagelocation li:last-child, #pagelocation li:last-child a {
+    color:  #428bca !important;
+}
 
 /* Main Content */
 #content h1, #content h2, #content h3, #content h4, #content h5, #content h6 {
