@@ -22,27 +22,21 @@ html, body {
     height: auto !important;
     width: 100%;
     padding-top: 51px; /* navbar height. 50px + 1px border */
-    padding-bottom: 60px; /* footer height */
+    padding-bottom: 95px; /* footer height + pageinfo height */
 }
 /* sticky footer; sticks to the bottom of the screen as long as contents are less than 1 screen long */
 #footer {
-    position: relative;
-    height: 60px; /* height of the footer */
+    position: relative; /* for z positioning */
+    min-height: 60px; /* fixed (minimum) height */
     width: 100%;
-}
-/* the footer will overflow in narrow screens. this extends the footer without masking contents */
-#footer > .container-fluid {
     background-color: #f5f5f5;
-    padding: 20px 15px;
+    padding: 20px 0px;
 }
 #pageinfo-container {
     position: relative;
     height: 35px;
     width: 100%;
     margin-top: -95px; /* #footer + #pageinfo-container */
-}
-#outbox {
-    padding-bottom: 95px; /* footer height + pageinfo height */
 }
 
 /*=========================================================
@@ -58,15 +52,14 @@ form.form-search {
     position: relative;
 }
 form.form-search:before {
-    display: block;
-    width: 14px;
-    height: 14px;
-    font-size: small;
     content: "\e003";
     font-family: 'Glyphicons Halflings';
+    font-size: small;
+    display: block;
     position: absolute;
-    top: 9px;
+    width: 14px;
     right: 8px;
+    bottom: 7px; /* (parent box height (34px) - parent line height (20px)) / 2 */
     opacity: .5;
 }
 .navbar-form { /* Bootstrap bug? counter glitchy margins when uncollapsed in xs view */
@@ -89,6 +82,232 @@ form.form-search:before {
     .navbar .navbar-collapse {
         position: absolute;
         right: 15px;
+    }
+}
+
+/* Sidebar toggle button */
+.sidebar-toggler {
+    background-image: none;
+    background-color: transparent;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    float: left;
+}
+.sidebar-toggler:focus,
+.sidebar-toggler:active:focus {
+    outline: 0;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+.navbar-default .sidebar-toggler {
+    color: #888;
+    border-color: #ddd;
+}
+.navbar-default .sidebar-toggler:hover,
+.navbar-default .sidebar-toggler:focus {
+    background-color: #ddd;
+}
+.navbar-inverse .sidebar-toggler {
+    color: #fff;
+    border-color: #333;
+}
+.navbar-inverse .sidebar-toggler:hover,
+.navbar-inverse .sidebar-toggler:focus {
+    background-color: #333;
+}
+.navbar-brand-wrapper { /* workaround for webkit bug */
+    display: table;
+    float: left;
+}
+@media screen and (max-width: 767px) {
+    .sidebar-toggler {
+        margin-left: 15px;
+    }
+    /* workaround for webkit bug */
+    .navbar-brand-wrapper {
+        display: block;
+        float: none;
+        text-align: center;
+    }
+    .navbar-brand {
+        float: none;
+        display: inline-block;
+    }
+}
+@media screen and (min-width: 992px) {
+    .sidebar-toggler {
+        display: none;
+    }
+}
+@media screen and (min-width: 768px) and (max-width: 991px) {
+    .navbar > .container .navbar-brand,
+    .navbar > .container-fluid .navbar-brand {
+        margin-left: 0px;
+    }
+}
+
+/* toggle button outline */
+.navbar a[href="#"]:focus {
+    outline: 0;
+}
+
+/* for comment toggle button */
+.navbar-default .navbar-nav > .on > a,
+.navbar-default .navbar-nav > .on > a:hover,
+.navbar-default .navbar-nav > .on > a:focus {
+    color: #555;
+    background-color: #e7e7e7;
+}
+.navbar-default .navbar-nav > .on > a {
+    background-image: -webkit-linear-gradient(top, #ebebeb 0%, #f3f3f3 100%);
+    background-image:      -o-linear-gradient(top, #ebebeb 0%, #f3f3f3 100%);
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#ebebeb), to(#f3f3f3));
+    background-image:         linear-gradient(to bottom, #ebebeb 0%, #f3f3f3 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffebebeb', endColorstr='#fff3f3f3', GradientType=0);
+    background-repeat: repeat-x;
+    -webkit-box-shadow: inset 0 3px 9px rgba(0, 0, 0, .075);
+            box-shadow: inset 0 3px 9px rgba(0, 0, 0, .075);
+}
+.navbar-inverse .navbar-nav > .on > a,
+.navbar-inverse .navbar-nav > .on > a:hover,
+.navbar-inverse .navbar-nav > .on > a:focus {
+    color: #fff;
+    background-color: #080808;
+}
+.navbar-inverse .navbar-nav > .on > a {
+    background-image: -webkit-linear-gradient(top, #222 0%, #282828 100%);
+    background-image:      -o-linear-gradient(top, #222 0%, #282828 100%);
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#222), to(#282828));
+    background-image:         linear-gradient(to bottom, #222 0%, #282828 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff222222', endColorstr='#ff282828', GradientType=0);
+    background-repeat: repeat-x;
+    -webkit-box-shadow: inset 0 3px 9px rgba(0, 0, 0, .25);
+            box-shadow: inset 0 3px 9px rgba(0, 0, 0, .25);
+}
+
+/* navbar is minified and made transparent-ish under sideway view on phones */
+@media screen and (max-width: 640px) and (orientation: landscape) {
+    #outbox {
+        padding-top: 0;
+    }
+    .alert { /* to avoid the close button hiding behind minified navbar buttons */
+        margin-top: 20px;
+    }
+    .navbar-fixed-top {
+        left: auto;
+        right: 0;
+        background-image: none;
+        background-color: transparent;
+        border: none;
+
+        -webkit-box-shadow: none;
+                box-shadow: none;
+    }
+    .navbar-brand-wrapper {
+        display: none;
+    }
+    .sidebar-toggler {
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+    }
+    .navbar-toggle {
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+    }
+    .navbar-default .sidebar-toggler,
+    .navbar-default .navbar-toggle {
+        background-color: rgba(248,248,248,0.8);
+        border-color: rgba(221,221,221,0.8);
+    }
+    .navbar-default .sidebar-toggler:hover,
+    .navbar-default .sidebar-toggler:focus,
+    .navbar-default .navbar-toggle:hover,
+    .navbar-default .navbar-toggle:focus {
+        background-color: rgba(221,221,221,0.8);
+        border-color: transparent;
+    }
+    .navbar-inverse .sidebar-toggler,
+    .navbar-inverse .navbar-toggle {
+        background-color: rgba(34,34,34,0.6);
+        border-color: rgba(34,34,34,0.1);
+    }
+    .navbar-inverse .sidebar-toggler:hover,
+    .navbar-inverse .sidebar-toggler:focus,
+    .navbar-inverse .navbar-toggle:hover,
+    .navbar-inverse .navbar-toggle:focus {
+        background-color: rgba(34,34,34,0.7);
+        border-color: transparent;
+    }
+    .navbar-default .sidebar-toggler,
+    .navbar-inverse .sidebar-toggler {
+        border-right-color: transparent;
+    }
+
+    /* when menu is uncollapsed */
+    .navbar-fixed-top {
+        -webkit-transition: none !important;
+             -o-transition: none !important;
+                transition: none !important;
+    }
+    .navbar-fixed-top.on {
+        left: 0;
+        border-width: 0 0 1px;
+        border-style: solid;
+    }
+    .navbar-fixed-top.on .navbar-brand-wrapper {
+        display: block;
+    }
+    .navbar-fixed-top.on .sidebar-toggler {
+        border-radius: 4px;
+    }
+    .navbar-fixed-top.on .navbar-toggle {
+        border-radius: 4px;
+    }
+    .navbar-fixed-top.navbar-default.on {
+        background-color: #f8f8f8;
+        border-color: #e7e7e7;
+        background-image: -webkit-linear-gradient(top, #fff 0%, #f8f8f8 100%);
+        background-image:      -o-linear-gradient(top, #fff 0%, #f8f8f8 100%);
+        background-image: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#f8f8f8));
+        background-image:         linear-gradient(to bottom, #fff 0%, #f8f8f8 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffffff', endColorstr='#fff8f8f8', GradientType=0);
+        filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
+        -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, .15), 0 1px 5px rgba(0, 0, 0, .075);
+                box-shadow: inset 0 1px 0 rgba(255, 255, 255, .15), 0 1px 5px rgba(0, 0, 0, .075);
+    }
+    .navbar-fixed-top.navbar-inverse.on {
+        background-color: #222;
+        border-color: #080808;
+        background-image: -webkit-linear-gradient(top, #3c3c3c 0%, #222 100%);
+        background-image:      -o-linear-gradient(top, #3c3c3c 0%, #222 100%);
+        background-image: -webkit-gradient(linear, left top, left bottom, from(#3c3c3c), to(#222));
+        background-image:         linear-gradient(to bottom, #3c3c3c 0%, #222 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff3c3c3c', endColorstr='#ff222222', GradientType=0);
+        filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
+    }
+    .navbar-default.navbar-fixed-top.on .sidebar-toggler,
+    .navbar-default.navbar-fixed-top.on .navbar-toggle {
+        background-color: transparent;
+        border-color: #ddd;
+    }
+    .navbar-default.navbar-fixed-top.on .sidebar-toggler:hover,
+    .navbar-default.navbar-fixed-top.on .sidebar-toggler:focus,
+    .navbar-default.navbar-fixed-top.on .navbar-toggle:hover,
+    .navbar-default.navbar-fixed-top.on .navbar-toggle:focus {
+        background-color: #ddd;
+        border-color: #ddd;
+    }
+    .navbar-inverse.navbar-fixed-top.on .sidebar-toggler,
+    .navbar-inverse.navbar-fixed-top.on .navbar-toggle {
+        background-color: transparent;
+        border-color: #333;
+    }
+    .navbar-inverse.navbar-fixed-top.on .sidebar-toggler:hover,
+    .navbar-inverse.navbar-fixed-top.on .sidebar-toggler:focus,
+    .navbar-inverse.navbar-fixed-top.on .navbar-toggle:hover,
+    .navbar-inverse.navbar-fixed-top.on .navbar-toggle:focus {
+        background-color: #333;
+        border-color: #333;
     }
 }
 
@@ -517,6 +736,7 @@ table > tfoot > tr.danger > th {
 /* misc */
 pre {
     overflow: visible;
+    white-space: pre-wrap;
 }
 
 /*=========================================================
@@ -594,14 +814,14 @@ pre {
         display: none; /* erase sidebar for better footer position when collapsed */
     }
     /* when toggled */
-    #sidebar-curtain.active {
+    #sidebar-curtain.on {
         width: 195px;
         left: 0;
     }
-    #sidebar-mover.active {
+    #sidebar-mover.on {
         left: 0;
     }
-    #sidebar.active, #sidebar.toggling {
+    #sidebar.on, #sidebar.toggling {
         display: block;
     }
     /* animation */
@@ -611,7 +831,7 @@ pre {
                 transition: all .25s ease-out;
     }
     /* prevent horizontal scroll bar when toggled */
-    #outbox.toggle.active, #outbox.toggle.toggling {
+    #outbox.on, #outbox.toggling {
         overflow-x: hidden;
     }
 }
@@ -625,27 +845,8 @@ pre {
     }
 }
 
-/* trigger button */
-.offcanvas-trigger {
-    background-image: none;
-    position: fixed;
-    left: -1px;
-    z-index: 1000;
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
-    border-bottom-left-radius: 0;
-}
-.offcanvas-trigger:focus {
-    background-color: #fff;
-}
-@media screen and (min-width: 992px) {
-    .offcanvas-trigger {
-        display: none;
-    }
-}
-
 /*=========================================================
-   print view
+   print preview
 ===========================================================*/
 
 @media print {
@@ -666,6 +867,9 @@ pre {
         left: 0;
         padding: 0;
         margin: 0;
+    }
+    #contentbox {
+        display: block; /* to fix Firefox print preview */
     }
     a[href]:after { /* to stop printing anchor destinations in print mode */
         content: "";
@@ -723,30 +927,43 @@ pre {
 #pagelocation li:last-child a {
     color: #999;
 }
+/* footer font-size */
+#footer div > * {
+    font-size: 85%;
+}
 
 /*=========================================================
    implicit glyphicons
 ===========================================================*/
 
-*[class^="menu-"]:before {
+*[class^="menu-"]:before,
+*[class^="menu-"]:after {
     font-family: 'Glyphicons Halflings' !important;
     font-style: normal;
     font-weight: normal;
+
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
-*[class^="menu-nav-"]:before {
-    font-size: smaller;
-    padding-left: 5px;
+*[class^="menu-nav-"]:before,
+*[class^="menu-dd-"]:before {
     float: right;
     margin-top: -1px;
 }
-*[class^="menu-dd-"]:before {
-    float: right;
+*[class^="menu-nav-"]:before {
+    font-size: smaller;
+    margin-left: 5px;
 }
 *[class^="menu-dd-"]:after {
     content: "";
-    padding: 0 10px;
+    line-height: 1;
+    padding-left: 1em;
+    margin-left: 5px;
+}
+*[class^="menu-btn-"]:before {
+    line-height: 1;
+    position: relative;
+    top: 1px;
 }
 @media screen and (min-width: 768px) {
     *[class^="menu-nav-"] {
@@ -765,7 +982,7 @@ pre {
 }
 /* main menu dropdown elems */
 .menu-dd-raw:before {
-    content: "\e105"; /* .glyphicon-eye-open */
+    content: "\e022"; /* .glyphicon-file */
 }
 .menu-dd-print:before {
     content: "\e045"; /* .glyphicon-print */
@@ -864,22 +1081,23 @@ pre {
 .menu-nav-login:before {
     content: "\e161"; /* .glyphicon-login */
 }
-.menu-nav-login:after {
-    content: "";
-}
 .menu-nav-edit:before {
     content: "\270f"; /* .glyphicon-pencil */
-}
-.menu-nav-edit:after {
-    content: "";
 }
 .menu-nav-menu:before {
 }
 .menu-nav-user:before {
 }
 .menu-nav-comment:before {
+    content: "\e105";  /* .glyphicon-eye-open */
+}
+.menu-nav-comment.on:before {
     content: "\e106";  /* .glyphicon-eye-close */
 }
-.menu-nav-comment:after {
-    content: "";
+/* navbar buttons */
+.menu-btn-sidebar-toggler:before {
+    content: "\e080"; /* .glyphicon-chevron-right */
+}
+.menu-btn-sidebar-toggler.on:before {
+    content: "\e079"; /* .glyphicon-chevron-left */
 }

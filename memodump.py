@@ -135,13 +135,18 @@ class Theme(ThemeBase):
         """
 
         html = u"""
-  <div id="outbox" class="toggle">
+  <div id="outbox" class="sidebar-toggle">
     <!-- Bootstrap navbar -->
-    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="navbar navbar-inverse navbar-fixed-top navbar-mobile-toggle" role="navigation">
       <div class="container">
 
         <!-- Navbar header -->
         <div class="navbar-header">
+          <!-- Sidebar toggler -->
+          <button type="button" class="btn navbar-btn sidebar-toggler" data-toggle="toggle" data-target=".sidebar-toggle">
+            <span class="sr-only">Toggle sidebar</span>
+            <span class="menu-btn-sidebar-toggler sidebar-toggle"></span>
+          </button>
           <!-- Button to show navbar controls when collapsed -->
           <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
             <span class="sr-only">Toggle navigation</span>
@@ -150,7 +155,7 @@ class Theme(ThemeBase):
             <span class="icon-bar"></span>
           </button>
           <!-- Sitename -->
-          %(sitename)s
+%(sitename)s
         </div> <!-- /.navbar-header -->
 
         <!-- Body of navbar -->
@@ -178,15 +183,12 @@ class Theme(ThemeBase):
     <!-- End of navbar -->
 
     <div class="container no-padding" id="pagebox">
-      <button class="btn btn-default btn-xs offcanvas-trigger" data-toggle="toggle">
-        <span class="glyphicon glyphicon-th-list"></span>
-      </button>
 %(custom_pre)s
 
       <!-- Sidebar -->
-      <div class="toggle" id="sidebar-curtain">
-        <div class="toggle" id="sidebar-mover">
-          <div class="toggle" id="sidebar" role="navigation">
+      <div class="sidebar-toggle" id="sidebar-curtain">
+        <div class="sidebar-toggle" id="sidebar-mover">
+          <div class="sidebar-toggle" id="sidebar" role="navigation">
 <!-- SideBar contents -->
 %(sidebar)s
 <!-- End of SideBar contents -->
@@ -201,20 +203,20 @@ class Theme(ThemeBase):
 %(location)s
 
 <!-- Page contents -->
-""" % { 'sitename': self.logo(),
-        'location': self.location(d),
-        'menu': self.menu(d),
-        'usermenu': self.username(d),
-        'search': self.searchform(d),
-        'edit': self.editbutton(d),
-        'commentbutton': self.commentbutton(),
-        'sidebar': self.sidebar(d),
-        'trail': self.trail(d),
-        #'quicklinks': self.quicklinks(d),
-        'navilinks': self.navibar(d),
-        'msg': self.msg(d),
-        'custom_pre': self.emit_custom_html(self.cfg.page_header1), # custom html just below the navbar, not recommended!
-        'custom_post': self.emit_custom_html(self.cfg.page_header2), # custom html just before the contents, not recommended!
+""" % {'sitename': self.logo(),
+       'location': self.location(d),
+       'menu': self.menu(d),
+       'usermenu': self.username(d),
+       'search': self.searchform(d),
+       'edit': self.editbutton(d),
+       'commentbutton': self.commentbutton(),
+       'sidebar': self.sidebar(d),
+       'trail': self.trail(d),
+       #'quicklinks': self.quicklinks(d),
+       'navilinks': self.navibar(d),
+       'msg': self.msg(d),
+       'custom_pre': self.emit_custom_html(self.cfg.page_header1), # custom html just below the navbar, not recommended!
+       'custom_post': self.emit_custom_html(self.cfg.page_header2), # custom html just before the contents, not recommended!
       }
 
         return html
@@ -240,6 +242,7 @@ class Theme(ThemeBase):
 
         html = u"""
 <!-- End of page contents -->
+        <div class="clearfix"></div>
 
       </div> <!-- /#contentbox -->
       <!-- End of content body -->
@@ -258,13 +261,11 @@ class Theme(ThemeBase):
 
   <!-- Footer -->
   <div id="footer">
-    <div class="container-fluid">
-      <div class="container text-right text-muted">
-        %(credits)s
-        %(version)s
+    <div class="container text-right text-muted">
+      %(credits)s
+      %(version)s
 %(custom_post)s
-      </div> <!-- /.container -->
-    </div> <!-- /.container-fluid -->
+    </div> <!-- /.container -->
   </div> <!-- /#footer -->
   <!-- End of footer -->
 
@@ -275,14 +276,25 @@ class Theme(ThemeBase):
   <script src="%(prefix)s/%(theme)s/js/bootstrap.min.js"></script>
   <!-- toggle.js by dossist -->
   <script src="%(prefix)s/%(theme)s/js/toggle.js"></script>
+  <!-- Uncollapse minified navbar under mobile landscape view syncing with menu button -->
+  <script>
+    +function ($) {
+      $('.navbar-collapse').on('show.bs.collapse', function () {
+        $('.navbar-mobile-toggle').togglejs('show');
+      });
+      $('.navbar-collapse').on('hidden.bs.collapse', function () {
+        $('.navbar-mobile-toggle').togglejs('hide');
+      });
+    }(jQuery);
+  </script>
   <!-- End of JavaScript -->
-""" % { 'pageinfo': self.pageinfo(page),
-        'custom_pre': self.emit_custom_html(self.cfg.page_footer1), # Pre footer custom html (not recommended!)
-        'credits': self.credits(d),
-        'version': self.showversion(d, **keywords),
-        'custom_post': self.emit_custom_html(self.cfg.page_footer2), # In-footer custom html (not recommended!)
-        'prefix': self.cfg.url_prefix_static,
-        'theme': self.name,
+""" % {'pageinfo': self.pageinfo(page),
+       'custom_pre': self.emit_custom_html(self.cfg.page_footer1), # Pre footer custom html (not recommended!)
+       'credits': self.credits(d),
+       'version': self.showversion(d, **keywords),
+       'custom_post': self.emit_custom_html(self.cfg.page_footer2), # In-footer custom html (not recommended!)
+       'prefix': self.cfg.url_prefix_static,
+       'theme': self.name,
       }
 
         return html
@@ -301,6 +313,11 @@ class Theme(ThemeBase):
         if self.cfg.logo_string:
             page = wikiutil.getFrontPage(self.request)
             html = page.link_to_raw(self.request, self.cfg.logo_string, css_class="navbar-brand")
+            html = u'''
+          <div class="navbar-brand-wrapper">
+            %s
+          </div>
+          ''' % html
         return html
 
     def location(self, d):
@@ -311,7 +328,7 @@ class Theme(ThemeBase):
         """
         html = u''
         page = d['page']
-        pages_hide = [self.request.cfg.page_front_page,]
+        pages_hide = [self.request.cfg.page_front_page, ]
         try:
             pages_hide = self.request.cfg.memodump_hidelocation
         except AttributeError:
@@ -323,7 +340,7 @@ class Theme(ThemeBase):
 %(pagename)s
           %(lastupdate)s
         </div>
-''' % {'interwiki': self.interwiki(d), 'pagename': self.title(d), 'lastupdate': self.lastupdate(d),}
+''' % {'interwiki': self.interwiki(d), 'pagename': self.title(d), 'lastupdate': self.lastupdate(d), }
         return html
 
     def interwiki(self, d):
@@ -411,8 +428,7 @@ class Theme(ThemeBase):
             _ = self.request.getText
             querystr = {'action': 'edit'}
             text = u'<span class="hidden-sm">%s</span>' % _('Edit')
-            querystr['editor'] = 'text'
-            attrs = {'name': 'texteditlink', 'rel': 'nofollow', 'css_class': 'menu-nav-edit'}
+            attrs = {'name': 'editlink', 'rel': 'nofollow', 'css_class': 'menu-nav-edit'}
             button = page.link_to_raw(self.request, text=text, querystr=querystr, **attrs)
             if edit_mode:
                 li_attr = u' class="active"'
@@ -444,8 +460,8 @@ class Theme(ThemeBase):
         """
         _ = self.request.getText
         html = u'''
-            <li class="toggleCommentsButton" style="display:none;">
-              <a href="#" class="menu-nav-comment nbcomment" rel="nofollow" onClick="toggleComments();return false;">
+            <li class="toggleCommentsButton navbar-comment-toggle" style="display:none;">
+              <a href="#" class="menu-nav-comment nbcomment navbar-comment-toggle" rel="nofollow" onClick="toggleComments();return false;" data-toggle="toggle" data-target=".navbar-comment-toggle">
                 <span class="hidden-sm">%s</span>
               </a>
             </li>
@@ -616,18 +632,18 @@ class Theme(ThemeBase):
                 # 'separator' and 'header' are automatically removed when there are no entries to show among them.
                 'special': False,
             },
-            'print': {'title': _('Print View'),},
+            'print': {'title': _('Print View'), },
             'refresh': {
                 'title': _('Delete Cache'),
                 'special': not (self.memodumpIsAvailableAction(page, 'refresh') and page.canUseCache()) and 'removed',
             },
-            'SpellCheck': {'title': _('Check Spelling'),},
-            'RenamePage': {'title': _('Rename Page'),},
-            'CopyPage':   {'title': _('Copy Page'),},
-            'DeletePage': {'title': _('Delete Page'),},
-            'LikePages':  {'title': _('Like Pages'),},
-            'LocalSiteMap': {'title': _('Local Site Map'),},
-            'MyPages':    {'title': _('My Pages'),},
+            'SpellCheck': {'title': _('Check Spelling'), },
+            'RenamePage': {'title': _('Rename Page'), },
+            'CopyPage':   {'title': _('Copy Page'), },
+            'DeletePage': {'title': _('Delete Page'), },
+            'LikePages':  {'title': _('Like Pages'), },
+            'LocalSiteMap': {'title': _('Local Site Map'), },
+            'MyPages':    {'title': _('My Pages'), },
             'SubscribeUser': {
                 'title': _('Subscribe User'),
                 'special': not (self.memodumpIsAvailableAction(page, 'SubscribeUser')
@@ -642,10 +658,10 @@ class Theme(ThemeBase):
                 'special': not (self.memodumpIsAvailableAction(page, 'revert')
                                 and request.user.may.revert(page.page_name)) and 'removed',
             },
-            'PackagePages': {'title': _('Package Pages'),},
-            'RenderAsDocbook': {'title': _('Render as Docbook'),},
-            'SyncPages': {'title': _('Sync Pages'),},
-            'AttachFile': {'title': _('Attachments'),},
+            'PackagePages': {'title': _('Package Pages'), },
+            'RenderAsDocbook': {'title': _('Render as Docbook'), },
+            'SyncPages': {'title': _('Sync Pages'), },
+            'AttachFile': {'title': _('Attachments'), },
             'quicklink': {
                 'title': quicklink[1], 'args': dict(action=quicklink[0], rev=rev),
                 'special': not quicklink[0] and 'removed',
@@ -654,11 +670,11 @@ class Theme(ThemeBase):
                 'title': subscribe[1], 'args': dict(action=subscribe[0], rev=rev),
                 'special': not subscribe[0] and 'removed',
             },
-            'info': {'title': _('Info'),},
+            'info': {'title': _('Info'), },
 # menu items not in menu_def will be assumed to be action names,
 # and receive appropriate title, href, and args automatically.
-#           'Load': {'title': _('Load'),},
-#           'Save': {'title': _('Save'),},
+#           'Load': {'title': _('Load'), },
+#           'Save': {'title': _('Save'), },
             # menu decorations
             '__separator__':   {'title': _('------------------------'), 'special': 'separator', },
             '----':            {'title': _('------------------------'), 'special': 'separator', },
@@ -888,6 +904,29 @@ class Theme(ThemeBase):
 
         return (action, text)
 
+    def sidebar(self, d, **keywords):
+        """ Display page called SideBar as an additional element on every page
+        content_id has been changed from the original
+
+        @param d: parameter dictionary
+        @rtype: string
+        @return: sidebar html
+        """
+
+        # Check which page to display, return nothing if doesn't exist.
+        sidebar = self.request.getPragma('sidebar', u'SideBar')
+        page = Page(self.request, sidebar)
+        if not page.exists():
+            return u""
+        # Capture the page's generated HTML in a buffer.
+        buffer = StringIO.StringIO()
+        self.request.redirect(buffer)
+        try:
+            page.send_page(content_only=1, content_id="sidebar-content")
+        finally:
+            self.request.redirect()
+        return u'<div class="sidebar clearfix">%s</div>' % buffer.getvalue()
+
     def trail(self, d):
         """ Assemble page trail
 
@@ -1084,7 +1123,7 @@ class Theme(ThemeBase):
 '''
         param = {
             'close': u'<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>',
-            'dismiss': 'alert-dismissable ',
+            'dismiss': 'alert-dismissible ',
             'msg': '',
             'color': '',
         }

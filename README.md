@@ -34,7 +34,6 @@ Install
 
 3. Copy directory `memodump` into static files directory `MoinMoin/web/static/htdocs/`.
    Again location of that directory will vary. It could be:
-
     * `/usr/share/moin/htdocs` if you installed MoinMoin from Ubuntu package
     * `/usr/local/lib/python2.7/dist-packages/MoinMoin/web/static/htdocs` if you installed MoinMoin from zip
     * and so on
@@ -81,6 +80,22 @@ For details, please refer to [the project wiki][Wiki Home].
 
 Create a page named `SideBar` to create your own site-wide sidebar.
 In sidebar, list items receive special menu-like styles.  
+
+
+### Site logo ###
+
+If you go with the default wikiconfig, the default logo picture will run off the navbar height.
+This theme is not optimized for the default logo picture (although it won't break page design).
+By disabling the logo, MoinMoin will use your site name as a text logo with a link to the FrontPage.
+To do it, just comment out `logo_string` in `wikiconfig.py`:
+
+```python
+    logo_string = ...
+```
+↓
+```python
+#   logo_string = ...
+```
 
 
 ### Location area ###
