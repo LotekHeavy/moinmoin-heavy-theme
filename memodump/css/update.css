@@ -1,20 +1,25 @@
 /* Fontsize and Font Family */
+
 html > body {
-    font-size: 16px;
-    font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif
+    font-size:          16px;
+    font-family:        "Lucida Sans Unicode", "Lucida Grande", sans-serif;
 }
+
+
 
 /* Outbox */
 #outbox #navibar {
-    font-size:  1.25em;
-    font-weight:    bold;
+    font-size:          1.25em;
+    font-weight:        bold;
 }
 #outbox #sidebar h4 {
-    font-size: 0.75em;
-    margin-top: 1.5em;
-    margin-bottom: 0em;
-    padding-left: 0em;
+    font-size:          0.75em;
+    margin-top:         1.5em;
+    margin-bottom:      0em;
+    padding-left:       0em;
 }
+
+
 
 /* Contentbox */
 #contentbox #location .lastupdate {
@@ -23,6 +28,8 @@ html > body {
 #contentbox #location #pagelocation li:last-child, #pagelocation li:last-child a {
     color:  #428bca !important;
 }
+
+
 
 /* Main Content */
 #content h1, #content h2, #content h3, #content h4, #content h5, #content h6 {
@@ -41,11 +48,18 @@ html > body {
     border-top: 1px solid LightGray;
     margin-bottom: 0px;
 }
+#content pre {
+    font-family: "Lucida Console", Monaco, monospace;
+}
+
+
 
 /* Footer */ 
 #footer {
     font-size:      0.85em;
 }
+
+
 
 /*
 arnica thumbnails styles
@@ -53,15 +67,12 @@ arnica thumbnails styles
 copyright (C) 2008-2009 MoinMoin:ReimarBauer
 license: GNU GPL, see COPYING for details
 */
-
-.clearboth { clear: both; }
-
+div.arnica .clearboth { clear: both; }
 div.arnica {
     display: block;
     text-align: center;
     margin: 0em;
 }
-
 .arnica  .thumbnail {
     position: relative;
     display: block;
@@ -70,64 +81,54 @@ div.arnica {
     margin: 0 15px 15px 0;
     border: none;
 }
-
 .arnica .text {
     position: relative;
     text-align: left;
     margin: 0;
     padding: 0.2em;
 }
-
 .arnica .imagecont {
     position: relative;
 }
-
 .arnica .title {
     text-align: center;
     padding: 0.2em;
     line-height: 1.2;
     font-size: 90%;
 }
-
 .arnica .image {
     position: absolute;
     bottom: 0;
     font-size: 0px;
 }
-
 .arnica .description {
     text-align: left;
     padding: 0.2em;
     line-height: 1.2;
     font-size: 90%;
 }
-
 .arnica .show-datetime {
     text-align: center;
     padding: 0.2em;
     line-height: 1.2;
     font-size: 90%;
  }
-
 .arnica form {
     padding: 0;
     margin: 0;
     position: relative;
 }
-
 .arnica .html-show-tools {
     position: relative;
     width: 100%;
     padding-top: 2px;
 }
-
 .arnica .html-show-tools ul {
     display: inline;
     list-style-type: none;
     margin: 0;
     padding: 0;
 }
-
 .arnica .html-show-tools li {
     display: table-cell;
     position: relative;
@@ -141,8 +142,6 @@ arnica_slides styles
 copyright © 2008-2012 MoinMoin:ReimarBauer, MoinMoin:RadomirDopieralski
 license: GNU GPL, see COPYING for details
 */
-
-
 a.first_slide {
     display: inline-block;
 }
@@ -223,35 +222,27 @@ a.last_slide_disabled:before {
     width: 32px;
     height: 32px;
 }
-
-
 div.arnica-slides {
     position: relative;
     display: inline-block;
     text-align: center;
-    /*border-style: outset;
-    border-width: 3px;*/
     margin: 2em;
 }
-
 .arnica-slides .navigation-animation {
     text-align: center;
     vertical-align: middle;
     margin: 0.5em;
 }
-
 .arnica-slides .navigation-button {
     text-align: center;
     vertical-align: middle;
     margin: 0.5em;
 }
-
 .arnica-slides .image {
     text-align: center;
     vertical-align: middle;
     margin: 0.5em;
 }
-
 .arnica-slides .image-description {
     text-align: center;
     padding: 0.5em;
