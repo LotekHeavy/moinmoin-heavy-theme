@@ -35,7 +35,7 @@ from MoinMoin.Page import Page
 
 class Theme(ThemeBase):
 
-    name = "memodump"
+    name = "glamheavy"
 
     _ = lambda x: x     # We don't have gettext at this moment, so we fake it
     icons = {
